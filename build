@@ -94,8 +94,7 @@ echo -e "${RCol} "
 cd $anykernel
 rm -rf *.zip
 zip_name="$kernel_name-${2}-$date.zip"
-zip -r9 -q UPDATE-AnyKernel2.zip * -x README UPDATE-AnyKernel2.zip
-mv UPDATE-AnyKernel2.zip $zip_name
+zip -r9 -q $zip_name * -x README.md
 
 # Turn back to the source dir
 cd $kernel_dir
