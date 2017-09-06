@@ -44,6 +44,11 @@ echo -e " "
 echo -e "${BRed}=============================================="
 echo -e "${BRed}=============================================="
 echo -e "${RCol} "
+
+# Cleanup from the old image
+rm -rf $objdir/arch/$ARCH/boot/Image.gz-dtb
+
+# Start the real building
 echo -e " "
 make -s O=$objdir $CONFIG_FILE $THREADS
 echo -e "${BGre}           Building the Kernel..."
@@ -51,6 +56,19 @@ echo -e " "
 echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 make -s O=$objdir $THREADS
+
+# Check compilation status
+
+if [ ! -f $objdir/arch/$ARCH/boot/Image.gz-dtb ]; then
+echo -e " "
+echo -e "${BRed}            Compilation Failed!"
+echo -e " "
+echo -e "${BRed}=============================================="
+echo -e "${BRed}=============================================="
+echo -e "${RCol} "
+exit 1
+fi;
+
 
 # Copy modules
 echo -e " "
@@ -78,7 +96,7 @@ cd $kernel_dir
 
 # Output building state
 echo -e " "
-echo -e "${BGre}               Build finished"
+echo -e "${BGre}            Build finished succesfully!"
 echo -e "${BRed}=============================================="
 echo -e "${BRed}=============================================="
 echo -e " "
