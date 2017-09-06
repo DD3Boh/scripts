@@ -39,10 +39,10 @@ date="$(date +'%Y-%m-%d-%H:%M')"
 
 # Start building
 echo -e " "
-echo -e "${BGre}            Starting building"
+echo -e "${BGre}              Starting building"
 echo -e " "
 echo -e "${BRed}=============================================="
-echo -e "${BRed}=============================================="
+echo -e "=============================================="
 echo -e "${RCol} "
 
 # Cleanup from the old image
@@ -51,7 +51,7 @@ rm -rf $objdir/arch/$ARCH/boot/Image.gz-dtb
 # Start the real building
 echo -e " "
 make -s O=$objdir $CONFIG_FILE $THREADS
-echo -e "${BGre}           Building the Kernel..."
+echo -e "${BGre}            Building the Kernel..."
 echo -e " "
 echo -e "${BRed}=============================================="
 echo -e "${RCol} "
@@ -63,8 +63,8 @@ if [ ! -f $objdir/arch/$ARCH/boot/Image.gz-dtb ]; then
 echo -e " "
 echo -e "${BRed}            Compilation Failed!"
 echo -e " "
-echo -e "${BRed}=============================================="
-echo -e "${BRed}=============================================="
+echo -e "=============================================="
+echo -e "=============================================="
 echo -e "${RCol} "
 exit 1
 fi;
@@ -72,14 +72,14 @@ fi;
 
 # Copy modules
 echo -e " "
-echo -e "${BGre}              Copying modules..."
+echo -e "${BGre}             Copying modules..."
 echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 rm -rf $anykernel/modules/
 mkdir $anykernel/modules
 all_modules="$(find $objdir -name '*ko')" && cp -r $all_modules $anykernel/modules
 echo -e " "
-echo -e "${BGre}              Copying Kernel Image..."
+echo -e "${BGre}             Copying Kernel Image..."
 echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 cp -rf $objdir/arch/$ARCH/boot/Image.gz-dtb $anykernel/zImage
@@ -100,9 +100,9 @@ cd $kernel_dir
 
 # Output building state
 echo -e " "
-echo -e "${BGre}            Build finished succesfully!"
+echo -e "${BGre}           Build finished succesfully!"
 echo -e "${BRed}=============================================="
-echo -e "${BRed}=============================================="
+echo -e "=============================================="
 echo -e " "
 echo -e " "
 echo -e "${BGre}    $zip_name"
