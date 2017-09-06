@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# Colors
+
+RCol='\e[0m'    # Text Reset
+# Regular           Bold                Underline           High Intensity      BoldHigh Intens     Background          High Intensity Backgrounds
+Bla='\e[0;30m';     BBla='\e[1;30m';    UBla='\e[4;30m';    IBla='\e[0;90m';    BIBla='\e[1;90m';   On_Bla='\e[40m';    On_IBla='\e[0;100m';
+Red='\e[0;31m';     BRed='\e[1;31m';    URed='\e[4;31m';    IRed='\e[0;91m';    BIRed='\e[1;91m';   On_Red='\e[41m';    On_IRed='\e[0;101m';
+Gre='\e[0;32m';     BGre='\e[1;32m';    UGre='\e[4;32m';    IGre='\e[0;92m';    BIGre='\e[1;92m';   On_Gre='\e[42m';    On_IGre='\e[0;102m';
+Yel='\e[0;33m';     BYel='\e[1;33m';    UYel='\e[4;33m';    IYel='\e[0;93m';    BIYel='\e[1;93m';   On_Yel='\e[43m';    On_IYel='\e[0;103m';
+Blu='\e[0;34m';     BBlu='\e[1;34m';    UBlu='\e[4;34m';    IBlu='\e[0;94m';    BIBlu='\e[1;94m';   On_Blu='\e[44m';    On_IBlu='\e[0;104m';
+Pur='\e[0;35m';     BPur='\e[1;35m';    UPur='\e[4;35m';    IPur='\e[0;95m';    BIPur='\e[1;95m';   On_Pur='\e[45m';    On_IPur='\e[0;105m';
+Cya='\e[0;36m';     BCya='\e[1;36m';    UCya='\e[4;36m';    ICya='\e[0;96m';    BICya='\e[1;96m';   On_Cya='\e[46m';    On_ICya='\e[0;106m';
+Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    BIWhi='\e[1;97m';   On_Whi='\e[47m';    On_IWhi='\e[0;107m';
+
+# Kernel info
+kernel_dir=$PWD
+export ARCH="arm64"
+THREADS=-j$( nproc --all )
+
+case "${2}" in
+    oops | oopskernel | oops-kernel | oreo)
+        export CONFIG_FILE=${1}_defconfig
+        export objdir=$kernel_dir/out/${1}
+        kernel_name=Oops-Kernel;;
+    darkmoon | DarkMoon)
+        export CONFIG_FILE=darkmoon_defconfig
+        export objdir=$kernel_dir/out 
+        kernel_name=DarkMoon;;
+esac
+export anykernel=$kernel_dir/anykernel
+
+# Toolchain info
+export TOOLCHAIN_PATH="${HOME}/kernel/gcc/aarch64/linaro-7.x/"
+export CROSS_COMPILE=$TOOLCHAIN_PATH/bin/aarch64-linaro-elf-
+
+# Get date and time first
+date="$(date +'%Y-%m-%d-%H:%M')"
+
+# Start building
+echo -e " "
+echo -e "${BGre}            Starting building"
+echo -e " "
+echo -e "${BRed}=============================================="
+echo -e "${BRed}=============================================="
+echo -e "${RCol} "
+echo -e " "
+make -s O=$objdir $CONFIG_FILE $THREADS
+echo -e "${BGre}           Building the Kernel..."
+echo -e " "
+echo -e "${BRed}=============================================="
+echo -e "${RCol} "
+make -s O=$objdir $THREADS
+
+# Copy modules
+echo -e " "
+echo -e "${BGre}              Copying modules..."
+echo -e "${BRed}=============================================="
+echo -e "${RCol} "
+rm -rf $anykernel/modules/
+mkdir $anykernel/modules
+all_modules="$(find $objdir -name '*ko')" && cp -r $all_modules $anykernel/modules
+cp -rf $objdir/arch/$ARCH/boot/Image.gz-dtb $anykernel/zImage
+
+# Make the package
+echo -e " "
+echo -e "${BGre}                Packaging..."
+echo -e "${BRed}=============================================="
+echo -e "${RCol} "
+cd $anykernel
+rm -rf *.zip
+zip_name="$kernel_name-${1}-$date.zip"
+zip -r9 -q UPDATE-AnyKernel2.zip * -x README UPDATE-AnyKernel2.zip
+mv UPDATE-AnyKernel2.zip $zip_name
+
+# Turn back to the source dir
+cd $kernel_dir
+
+# Output building state
+echo -e " "
+echo -e "${BGre}               Build finished"
+echo -e "${BRed}=============================================="
+echo -e "${BRed}=============================================="
+echo -e " "
+echo -e " "
+echo -e "${BGre}    $zip_name"
+echo -e "-----------------------------------------------"
+echo -e "${RCol} "
