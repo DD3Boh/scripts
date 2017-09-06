@@ -18,17 +18,63 @@ kernel_dir=$PWD
 export ARCH="arm64"
 THREADS=-j$( nproc --all )
 
-case "${1}" in
-    oops | oopskernel | oops-kernel | oreo)
-        export CONFIG_FILE=${2}_defconfig
-        export objdir=$kernel_dir/out/${2}
-        kernel_name=Oops-Kernel;;
-    darkmoon | DarkMoon)
-        export CONFIG_FILE=darkmoon_defconfig
-        export objdir=$kernel_dir/out 
-        kernel_name=DarkMoon;;
-esac
+while [[ $# -ge 1 ]]; do
+    case "${1}" in
+            
+            # Check the device name
+            "-d" | "--device")
+                shift
+                
+                case ${1} in
+                
+                    "z2_row" | "z2_plus")
+                    device_name=${1}
+                    defconfig=${1}_defconfig
+                    objdir=$kernel_dir/out/$device_name;;
+                    *)
+                        echo -e "${BRed} "
+                        echo -e " "
+                        echo -e "=============================================="
+                        echo -e " "
+                        echo -e "            Invalid Kernel device!"
+                        echo -e " "
+                        echo -e "=============================================="
+                        echo -e "${RCol}"
+                        exit 1;;
+                esac;;
+
+            # Check the Kernel name
+            "-n" | "--name")
+                shift
+                
+                case ${1} in
+                
+                    "DarkMoon" | "darkmoon")
+                        kernel_name=DarkMoon
+                        defconfig=darkmoon_defconfig
+                        device_name=z2_plus
+                        objdir=$kernel_dir/out ;;
+                        
+                    "oreo" | "oops-kernel")
+                       kernel_name=Oops-Kernel;;
+                    *)
+                        echo -e "${BRed} "
+                        echo -e " "
+                        echo -e "=============================================="
+                        echo -e " "
+                        echo -e "            Invalid Kernel name!"
+                        echo -e " "
+                        echo -e "=============================================="
+                        echo -e "${RCol}"
+                        exit 1;;
+                esac;;
+        esac
+        
+        shift
+    done
+
 export anykernel=$kernel_dir/anykernel
+CONFIG_FILE=$defconfig
 
 # Toolchain info
 export TOOLCHAIN_PATH="${HOME}/kernel/gcc/aarch64/linaro-7.x/"
@@ -93,7 +139,7 @@ echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 cd $anykernel
 rm -rf *.zip
-zip_name="$kernel_name-${2}-$date.zip"
+zip_name="$kernel_name-$device_name-$date.zip"
 zip -r9 -q $zip_name * -x README.md
 
 # Turn back to the source dir
