@@ -78,6 +78,10 @@ echo -e "${RCol} "
 rm -rf $anykernel/modules/
 mkdir $anykernel/modules
 all_modules="$(find $objdir -name '*ko')" && cp -r $all_modules $anykernel/modules
+echo -e " "
+echo -e "${BGre}              Copying Kernel Image..."
+echo -e "${BRed}=============================================="
+echo -e "${RCol} "
 cp -rf $objdir/arch/$ARCH/boot/Image.gz-dtb $anykernel/zImage
 
 # Make the package
