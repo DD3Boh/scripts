@@ -18,10 +18,10 @@ kernel_dir=$PWD
 export ARCH="arm64"
 THREADS=-j$( nproc --all )
 
-case "${2}" in
+case "${1}" in
     oops | oopskernel | oops-kernel | oreo)
-        export CONFIG_FILE=${1}_defconfig
-        export objdir=$kernel_dir/out/${1}
+        export CONFIG_FILE=${2}_defconfig
+        export objdir=$kernel_dir/out/${2}
         kernel_name=Oops-Kernel;;
     darkmoon | DarkMoon)
         export CONFIG_FILE=darkmoon_defconfig
@@ -91,7 +91,7 @@ echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 cd $anykernel
 rm -rf *.zip
-zip_name="$kernel_name-${1}-$date.zip"
+zip_name="$kernel_name-${2}-$date.zip"
 zip -r9 -q UPDATE-AnyKernel2.zip * -x README UPDATE-AnyKernel2.zip
 mv UPDATE-AnyKernel2.zip $zip_name
 
