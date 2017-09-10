@@ -51,9 +51,8 @@ while [[ $# -ge 1 ]]; do
                 
                     "DarkMoon" | "darkmoon")
                         kernel_name=DarkMoon
-                        defconfig=darkmoon_defconfig
                         device_name=z2_plus
-                        objdir=$kernel_dir/out ;;
+                        objdir=$kernel_dir/out;;
                         
                     "oreo" | "oops-kernel")
                        kernel_name=Oops-Kernel;;
@@ -73,6 +72,10 @@ while [[ $# -ge 1 ]]; do
         shift
     done
 
+    
+if [[ $kernel_name == "DarkMoon" ]]; then
+    defconfig=darkmoon_defconfig
+fi;
 export anykernel=$kernel_dir/anykernel
 CONFIG_FILE=$defconfig
 
