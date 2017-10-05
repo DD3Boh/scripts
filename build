@@ -122,14 +122,7 @@ echo -e "${RCol} "
 exit 1
 fi;
 
-# Copy modules
-echo -e " "
-echo -e "${BGre}             Copying modules..."
-echo -e "${BRed}=============================================="
-echo -e "${RCol} "
-rm -rf $anykernel/modules/
-mkdir $anykernel/modules
-all_modules="$(find $objdir -name '*ko')" && cp -r $all_modules $anykernel/modules
+# Copy Kernel image
 echo -e " "
 echo -e "${BGre}             Copying Kernel Image..."
 echo -e "${BRed}=============================================="
