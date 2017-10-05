@@ -19,61 +19,61 @@ export ARCH="arm64"
 THREADS=-j$( nproc --all )
 
 while [[ $# -ge 1 ]]; do
-    case "${1}" in
-            
-            # Check the device name
-            "-d" | "--device")
-                shift
-                
-                case ${1} in
-                
-                    "z2_row" | "z2_plus")
-                    device_name=${1}
-                    defconfig=${1}_defconfig
-                    objdir=$kernel_dir/out/$device_name;;
-                    *)
-                        echo -e "${BRed} "
-                        echo -e " "
-                        echo -e "=============================================="
-                        echo -e " "
-                        echo -e "            Invalid Kernel device!"
-                        echo -e " "
-                        echo -e "=============================================="
-                        echo -e "${RCol}"
-                        exit 1;;
-                esac;;
+	case "${1}" in
 
-            # Check the Kernel name
-            "-n" | "--name")
-                shift
-                
-                case ${1} in
-                
-                    "DarkMoon" | "darkmoon")
-                        kernel_name=DarkMoon
-                        device_name=z2_plus
-                        objdir=$kernel_dir/out;;
-                        
-                    "oreo" | "octopus" | "Octopus")
-                       kernel_name=Octopus;;
-                    
-                    "caf" | "rebase")
-                        kernel_name=CAF;;
-                    *)
-                                            echo -e "${BRed} "
-                        echo -e " "
-                        echo -e "=============================================="
-                        echo -e " "
-                        echo -e "            Invalid Kernel name!"
-                        echo -e " "
-                        echo -e "=============================================="
-                        echo -e "${RCol}"
-                        exit 1;;
-                esac;;
-        esac
-        
-        shift
-    done
+			# Check the device name
+			"-d" | "--device")
+				shift
+
+				case ${1} in
+
+					"z2_row" | "z2_plus")
+					device_name=${1}
+					defconfig=${1}_defconfig
+					objdir=$kernel_dir/out/$device_name;;
+					*)
+						echo -e "${BRed} "
+						echo -e " "
+						echo -e "=============================================="
+						echo -e " "
+						echo -e "            Invalid Kernel device!"
+						echo -e " "
+						echo -e "=============================================="
+						echo -e "${RCol}"
+						exit 1;;
+				esac;;
+
+			# Check the Kernel name
+			"-n" | "--name")
+				shift
+
+				case ${1} in
+
+					"DarkMoon" | "darkmoon")
+						kernel_name=DarkMoon
+						device_name=z2_plus
+						objdir=$kernel_dir/out;;
+
+					"oreo" | "octopus" | "Octopus")
+						kernel_name=Octopus;;
+
+					"caf" | "rebase")
+						kernel_name=CAF;;
+					*)
+											echo -e "${BRed} "
+						echo -e " "
+						echo -e "=============================================="
+						echo -e " "
+						echo -e "            Invalid Kernel name!"
+						echo -e " "
+						echo -e "=============================================="
+						echo -e "${RCol}"
+						exit 1;;
+				esac;;
+		esac
+
+		shift
+	done
 
     
 if [[ $kernel_name == "DarkMoon" ]]; then
@@ -111,7 +111,6 @@ make -s O=$objdir $CONFIG_FILE $THREADS
 make -s O=$objdir $THREADS
 
 # Check compilation status
-
 if [ ! -f $objdir/arch/$ARCH/boot/Image.gz-dtb ]; then
 echo -e " "
 echo -e " "
@@ -122,7 +121,6 @@ echo -e "=============================================="
 echo -e "${RCol} "
 exit 1
 fi;
-
 
 # Copy modules
 echo -e " "
