@@ -54,10 +54,13 @@ while [[ $# -ge 1 ]]; do
                         device_name=z2_plus
                         objdir=$kernel_dir/out;;
                         
-                    "oreo" | "oops-kernel")
-                       kernel_name=Oops-Kernel;;
+                    "oreo" | "octopus" | "Octopus")
+                       kernel_name=Octopus;;
+                    
+                    "caf" | "rebase")
+                        kernel_name=CAF;;
                     *)
-                        echo -e "${BRed} "
+                                            echo -e "${BRed} "
                         echo -e " "
                         echo -e "=============================================="
                         echo -e " "
