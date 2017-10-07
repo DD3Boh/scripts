@@ -60,7 +60,7 @@ while [[ $# -ge 1 ]]; do
 					"caf" | "rebase")
 						kernel_name=CAF;;
 					*)
-											echo -e "${BRed} "
+						echo -e "${BRed} "
 						echo -e " "
 						echo -e "=============================================="
 						echo -e " "
