@@ -86,9 +86,6 @@ CONFIG_FILE=$defconfig
 export TOOLCHAIN_PATH="${HOME}/kernel/gcc/aarch64/linaro-7.x/"
 export CROSS_COMPILE=$TOOLCHAIN_PATH/bin/aarch64-linaro-elf-
 
-# Get date and time first
-date="$(date +'%Y-%m-%d-%H:%M')"
-
 # Start building
 echo -e " "
 echo -e "${BGre}              Starting building"
@@ -121,6 +118,8 @@ echo -e "=============================================="
 echo -e "${RCol} "
 exit 1
 fi;
+# Get date and time first
+date="$(date +'%Y-%m-%d-%H:%M')"
 
 # Copy Kernel image
 echo -e " "
@@ -136,6 +135,10 @@ echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 cd $anykernel
 rm -rf *.zip
+
+# Get date and time
+date="$(date +'%Y-%m-%d-%H:%M')"
+
 zip_name="$kernel_name-$device_name-$date.zip"
 zip -r9 -q $zip_name * -x README.md
 
