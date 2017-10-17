@@ -30,7 +30,7 @@ while [[ $# -ge 1 ]]; do
 					"z2_row" | "z2_plus")
 					device_name=${1}
 					defconfig=${1}_defconfig
-					objdir=$kernel_dir/out/$device_name;;
+					objdir=$kernel_dir/../out/$device_name;;
 					*)
 						echo -e "${BRed} "
 						echo -e " "
@@ -84,7 +84,7 @@ done
 if [[ $kernel_name == "DarkMoon" ]]; then
     defconfig=darkmoon_defconfig
 fi;
-export anykernel=$kernel_dir/anykernel
+export anykernel=$kernel_dir/../anykernel
 CONFIG_FILE=$defconfig
 
 # Toolchain info
