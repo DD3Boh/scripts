@@ -75,10 +75,10 @@ while [[ $# -ge 1 ]]; do
 			"-g" | "--gcc")
 				shift
 				gcc_version=${1};;
-		esac
+	esac
 
-		shift
-	done
+	shift
+done
 
     
 if [[ $kernel_name == "DarkMoon" ]]; then
