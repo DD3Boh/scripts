@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Include bin folder
+export PATH="$PATH:$HOME/bin"
+
+# Include configuration for crosstool-NG
+source $HOME/ct-ng.comp
+
+# Set nano as default editor
+export VISUAL=nano
+export EDITOR=nano
