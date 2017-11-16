@@ -89,11 +89,9 @@ CONFIG_FILE=$defconfig
 
 # Toolchain info
 if [[ $gcc_version == "7" ]]; then
-export TOOLCHAIN_PATH="${HOME}/kernel/gcc/aarch64/linaro-7.x/"
-export CROSS_COMPILE=$TOOLCHAIN_PATH/bin/aarch64-linaro-elf-
+export CROSS_COMPILE=$GCC_7_PATH
 else
-export TOOLCHAIN_PATH="${HOME}/kernel/aarch64-linux-android-4.9/"
-export CROSS_COMPILE=$TOOLCHAIN_PATH/bin/aarch64-linux-android-
+export CROSS_COMPILE=$GCC_49_PATH
 fi;
 
 # Start building
