@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Include bin folder
-export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:$HOME/scripts/bin"
 
 # Include configuration for crosstool-NG
 source $HOME/ct-ng.comp
