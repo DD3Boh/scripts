@@ -1,0 +1,6 @@
+#!/bin/bash
+
+function checkout_vendor() {
+	commit=$(git status | grep "You are currently cherry-picking commit" | awk '{print $6}' | sed 's/\.//');
+	for i in $(git status | grep "both modified" | awk '{print $3}'); do git checkout $commit -- $i; done
+};
