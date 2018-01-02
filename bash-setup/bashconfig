@@ -9,6 +9,9 @@ source $HOME/ct-ng.comp
 # Include git_shortcuts
 source $HOME/scripts/bin/git_shortcuts
 
+# Include bash_shortcuts
+source $HOME/scripts/bash-setup/bash_shortcuts
+
 # Set nano as default editor
 export VISUAL=nano
 export EDITOR=nano
