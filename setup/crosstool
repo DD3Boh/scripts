@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function install() {
+	cd
+	mkdir Programs
+	cd Programs
+	git clone https://github.com/crosstool-ng/crosstool-ng
+	./bootstrap
+	mkdir ~/Kernels
+	mkdir ~/Kernels/GCC
+	mkdir ~/Kernels/GCC/crosstool
+	./configure --prefix=$HOME/Kernels/GCC/crosstool
+	make
+	make install
+	export PATH="$PATH:$HOME/Kernels/GCC/crosstool/bin"
+	cp -r ~/Programs/crosstool-ng/ct-ng.comp ~/ct-ng.comp
+	rm -rf ~/Programs/crosstool-ng
+	cd ~/Kernels/GCC/crosstool
+	mkdir build-dir
+	mkdir src
+	cd build-dir
+}
+
+install

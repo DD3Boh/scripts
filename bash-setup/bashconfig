@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# CrosstoolNG configuration
+export PATH="$PATH:$HOME/Kernels/GCC/crosstool/bin"
+
 # Include bin folder
 export PATH="$PATH:$HOME/scripts/bin"
 
