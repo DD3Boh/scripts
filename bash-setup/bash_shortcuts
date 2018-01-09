@@ -42,3 +42,10 @@ function patch_strings_in_file() {
       echo "${PATTERN} not found in ${FILE}!"
     fi
 }
+
+function lineage_z2_plus() {
+	cd ~/ROMs/lineage
+	. build/envsetup.sh
+	lunch lineage_z2_plus-userdebug
+	virtualenv2 venv && source venv/bin/activate && export LC_ALL=C
+}
