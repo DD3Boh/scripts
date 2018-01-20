@@ -16,8 +16,8 @@ source $HOME/scripts/bin/git_shortcuts
 source $HOME/scripts/bash-setup/bash_shortcuts
 
 # Set nano as default editor
-export VISUAL=nano
-export EDITOR=nano
+export VISUAL=micro
+export EDITOR=micro
 
 # GCC configuration for my scripts
 export GCC_7_PATH='${HOME}/Kernels/GCC/aarch64/linaro-7.x/bin/aarch64-linaro-elf-'
