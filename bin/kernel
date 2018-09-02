@@ -57,6 +57,9 @@ while [[ $# -ge 1 ]]; do
 					"oreo" | "octopus" | "Octopus")
 						kernel_name=Octopus;;
 
+					"pie" | "pepper" | "Pepper")
+						kernel_name=Pepper;;
+
 					"caf" | "rebase")
 						kernel_name=CAF;;
 					*)
