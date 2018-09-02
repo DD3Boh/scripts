@@ -6,9 +6,6 @@ export PATH="$PATH:$HOME/Kernels/GCC/crosstool/bin"
 # Include bin folder
 export PATH="$PATH:$HOME/scripts/bin"
 
-# Include configuration for crosstool-NG
-source $HOME/ct-ng.comp
-
 # Include git_shortcuts
 source $HOME/scripts/bin/git_shortcuts
 

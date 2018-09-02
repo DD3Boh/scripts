@@ -5,6 +5,7 @@ function install() {
 	mkdir Programs
 	cd Programs
 	git clone https://github.com/crosstool-ng/crosstool-ng
+	cd crosstool-ng
 	./bootstrap
 	mkdir ~/Kernels
 	mkdir ~/Kernels/GCC
@@ -13,7 +14,6 @@ function install() {
 	make
 	make install
 	export PATH="$PATH:$HOME/Kernels/GCC/crosstool/bin"
-	cp -r ~/Programs/crosstool-ng/ct-ng.comp ~/ct-ng.comp
 	rm -rf ~/Programs/crosstool-ng
 	cd ~/Kernels/GCC/crosstool
 	mkdir build-dir
