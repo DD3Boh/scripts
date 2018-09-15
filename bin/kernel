@@ -49,11 +49,6 @@ while [[ $# -ge 1 ]]; do
 
 				case ${1} in
 
-					"DarkMoon" | "darkmoon")
-						kernel_name=DarkMoon
-						device_name=z2_plus
-						objdir=$kernel_dir/out;;
-
 					"oreo" | "octopus" | "Octopus")
 						kernel_name=Octopus;;
 
@@ -83,10 +78,6 @@ while [[ $# -ge 1 ]]; do
 	shift
 done
 
-    
-if [[ $kernel_name == "DarkMoon" ]]; then
-    defconfig=darkmoon_defconfig
-fi;
 export anykernel=$kernel_dir/../anykernel
 CONFIG_FILE=$defconfig
 
