@@ -7,7 +7,7 @@ export PATH="$PATH:$HOME/Kernels/GCC/crosstool/bin"
 export PATH="$PATH:$HOME/scripts/bin"
 
 # Include git_shortcuts
-source $HOME/scripts/bin/git_shortcuts
+source $HOME/scripts/bash-setup/git_shortcuts
 
 # Include bash_shortcuts
 source $HOME/scripts/bash-setup/bash_shortcuts
@@ -21,5 +21,5 @@ export GCC_7_PATH='${HOME}/Kernels/GCC/aarch64/linaro-7.x/bin/aarch64-linaro-elf
 export GCC_49_PATH='${HOME}/Kernels/GCC/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-'
 
 # Enable ccache
-export USE_CCACHE=1
+# export USE_CCACHE=1
 
