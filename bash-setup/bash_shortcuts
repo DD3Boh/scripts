@@ -43,9 +43,9 @@ function patch_strings_in_file() {
     fi
 }
 
-function lineage_z2_plus() {
+function lineage() {
 	cd ~/ROMs/lineage-16.0
 	. build/envsetup.sh
-	lunch lineage_z2_plus-userdebug
+	lunch lineage_${1}-userdebug
 	virtualenv2 venv && source venv/bin/activate && export LC_ALL=C
 }
