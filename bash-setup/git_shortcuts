@@ -18,3 +18,12 @@ function merge_log() {
 $(git log --oneline $(git branch | grep "\*" | sed 's/\* //')..FETCH_HEAD)"
 	git commit --amend -s --no-edit
 };
+
+function commit() {
+	git add -A
+	git commit -s
+};
+
+function amend() {
+	git commit --amend
+};
