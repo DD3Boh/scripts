@@ -73,6 +73,17 @@ while [[ $# -ge 1 ]]; do
 			"-g" | "--gcc")
 				shift
 				gcc_version=${1};;
+
+			*)
+					echo -e "${BRed} "
+					echo -e " "
+					echo -e "=============================================="
+					echo -e " "
+					echo -e "             Invalid command!"
+					echo -e " "
+					echo -e "=============================================="
+					echo -e "${RCol}"
+					exit 1;;
 	esac
 
 	shift
