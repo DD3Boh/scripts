@@ -25,23 +25,21 @@ while [[ $# -ge 1 ]]; do
 			"-d" | "--device")
 				shift
 
-				case ${1} in
-
-					"z2_row" | "z2_plus")
+				defconfig=${1}_defconfig
+				if [[ -f arch/$ARCH/configs/$defconfig ]]; then
 					device_name=${1}
-					defconfig=${1}_defconfig
-					objdir=$kernel_dir/../out/$device_name;;
-					*)
-						echo -e "${BRed} "
-						echo -e " "
-						echo -e "=============================================="
-						echo -e " "
-						echo -e "            Invalid Kernel device!"
-						echo -e " "
-						echo -e "=============================================="
-						echo -e "${RCol}"
-						exit 1;;
-				esac;;
+					objdir=$kernel_dir/../out/$device_name
+				else
+					echo -e "${BRed} "
+					echo -e " "
+					echo -e "=============================================="
+					echo -e " "
+					echo -e "            Invalid Kernel device!"
+					echo -e " "
+					echo -e "=============================================="
+					echo -e "${RCol}"
+					exit 1
+				fi;;
 
 			# Check the Kernel name
 			"-n" | "--name")
