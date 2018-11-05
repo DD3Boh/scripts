@@ -27,3 +27,10 @@ function commit() {
 function amend() {
 	git commit --amend
 };
+
+function pick {
+	while [[ $# -ge 1 ]]; do
+		git cherry-pick -s ${1}
+	shift
+	done;
+};
