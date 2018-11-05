@@ -19,18 +19,7 @@ $(git log --oneline $(git branch | grep "\*" | sed 's/\* //')..FETCH_HEAD)"
 	git commit --amend -s --no-edit
 };
 
-function commit() {
-	git add -A
-	git commit -s
-};
-
-function amend() {
-	git commit --amend
-};
-
-function pick {
-	while [[ $# -ge 1 ]]; do
-		git cherry-pick -s ${1}
-	shift
-	done;
-};
+alias commit='git commit -s'
+alias amend='git commit --amend'
+alias pick='git cherry-pick -s'
+alias add='git add -A'
