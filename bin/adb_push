@@ -1,0 +1,10 @@
+#!/bin/bash
+
+file=${1};
+file_path=$(find . -name $file | sed 's|./||');
+perms=$(adb shell stat $file_path | grep 'Access: (' | sed 's|Access: (||' | sed 's|/.*||');
+selinux_context=$(adb shell ls -Z $file_path | sed 's|:s0.*|:s0|' | sed 's|.*u:|u:|');
+
+adb push $file_path $file_path;
+adb shell chmod $perms $file_path;
+adb shell chcon $selinux_context $file_path;
