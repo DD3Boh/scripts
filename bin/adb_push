@@ -1,10 +1,74 @@
 #!/bin/bash
 
-file=${1};
-file_path=$(find . -name $file | sed 's|./||');
-perms=$(adb shell stat $file_path | grep 'Access: (' | sed 's|Access: (||' | sed 's|/.*||');
-selinux_context=$(adb shell ls -Z $file_path | sed 's|:s0.*|:s0|' | sed 's|.*u:|u:|');
+adb_push_help() {
+	echo "usage: adb_push -f <filename>"
+	echo "commands:"
+	echo "    -h | --help			show this help";
+	echo "    -f | --file			choose the file to push with the exact path";
+	echo "    -s | --search		search for the filename to push";
+	echo "    -d | --directory		push the chosen file to a different directory than the path it's in locally";
+};
 
-adb push $file_path $file_path;
-adb shell chmod $perms $file_path;
-adb shell chcon $selinux_context $file_path;
+adb_push_filechoosing() {
+	# Check if the file is present
+	if [[ $file_local_path == "" ]]; then
+		echo -e "File not found"
+		exit 1;
+	fi;
+
+	# Check if the file is present in multiple directories
+	results_number=$(find . -name $file -type f -printf '.' | wc -c)
+
+	if [[ $results_number != "1" ]]; then
+		echo "$results_number files matching found:"
+		find . -name $file -type f | sed 's|./||'
+		echo "Which file do you want to push?"
+		echo "Write the full directory"
+		read file_local_path;
+	fi;
+};
+
+adb_push_push()  {
+	# chmod and chcon
+	perms=$(adb shell stat $file_final_path | grep 'Access: (' | sed 's|Access: (||' | sed 's|/.*||');
+	selinux_context=$(adb shell ls -Z $file_final_path | sed 's|:s0.*|:s0|' | sed 's|.*u:|u:|');
+
+	# Push
+	adb push $file_local_path $file_final_path;
+	adb shell chmod $perms $file_final_path;
+	adb shell chcon $selinux_context $file_final_path;
+};
+
+while [[ $# -ge 1 ]]; do
+	case "${1}" in
+
+	# Get the filename
+	"-s" | "--search")
+		shift
+
+		file=${1};
+		file_local_path=$(find . -name $file | sed 's|./||');
+		file_final_path=$file_local_path;
+		adb_push_filechoosing;;
+
+	"-f" | "--file")
+		shift
+
+		file_local_path=${1};;
+
+	"-d" | "--directory")
+		shift
+		file_final_path=${1};
+		echo $file_final_path;;
+
+		"-h" | "--help")
+		shift
+
+		adb_push_help;
+		exit 1;;
+
+	esac
+	shift
+done;
+
+adb_push_push;
