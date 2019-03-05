@@ -18,7 +18,7 @@ function merge_log() {
 $(git log --oneline $(git branch | grep "\*" | sed 's/\* //')..FETCH_HEAD)" --signoff
 };
 
-alias commit='git commit -s'
+alias commit='git commit'
 alias amend='git commit --amend'
-alias pick='git cherry-pick -s'
+alias pick='git cherry-pick'
 alias add='git add -A'
