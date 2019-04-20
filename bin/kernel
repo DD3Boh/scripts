@@ -68,9 +68,9 @@ while [[ $# -ge 1 ]]; do
 				esac;;
 
 			# Check the GCC version
-			"-g" | "--gcc")
+			"-c" | "--compiler")
 				shift
-				gcc_version=${1};;
+				compiler=${1};;
 
 			*)
 					echo -e "${BRed} "
@@ -90,12 +90,29 @@ done
 export anykernel=$kernel_dir/../anykernel
 CONFIG_FILE=$defconfig
 
-# Toolchain info
-if [[ $gcc_version == "7" ]]; then
-export CROSS_COMPILE=$GCC_7_PATH
-else
-export CROSS_COMPILE=$GCC_49_PATH
-fi;
+case "$compiler" in
+	"gcc7.x" | "gcc7")
+		export CROSS_COMPILE=$GCC_7_PATH;;
+
+	"gcc4.9")
+		export CROSS_COMPILE=$GCC_49_PATH;;
+
+	"clang")
+		export CROSS_COMPILE=$GCC_49_PATH
+		export CLANG_TRIPLE=aarch64-linux-gnu-
+		CLANG_CC="CC=$CLANG_PATH/bin/clang";;
+
+	*)
+		echo -e "${BRed} "
+		echo -e " "
+		echo -e "=============================================="
+		echo -e " "
+		echo -e "             Invalid Toolchain!"
+		echo -e " "
+		echo -e "=============================================="
+		echo -e "${RCol}"
+		exit 1;;
+esac
 
 # Start building
 echo -e " "
@@ -116,7 +133,7 @@ echo -e "${BRed}=============================================="
 echo -e " "
 echo -e "${RCol} "
 make -s O=$objdir $CONFIG_FILE $THREADS
-make -s O=$objdir $THREADS
+make -s O=$objdir $THREADS $CLANG_CC
 
 # Check compilation status
 if [ ! -f $objdir/arch/$ARCH/boot/Image.gz-dtb ]; then

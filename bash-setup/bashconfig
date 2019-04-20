@@ -19,7 +19,7 @@ export EDITOR=micro
 # GCC configuration for my scripts
 export GCC_7_PATH='${HOME}/Kernels/GCC/aarch64/linaro-7.x/bin/aarch64-linaro-elf-'
 export GCC_49_PATH='${HOME}/Kernels/GCC/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-'
-export CLANG_PATH='${HOME}/Kernels/clang/google-host/clang-r346389b/bin/clang'
+export CLANG_PATH='${HOME}/Kernels/clang/clang-4691093'
 
 # Enable ccache
 # export USE_CCACHE=1
