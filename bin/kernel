@@ -31,7 +31,6 @@ while [[ $# -ge 1 ]]; do
 					objdir=$kernel_dir/../out/$device_name
 				else
 					echo -e "${BRed} "
-					echo -e " "
 					echo -e "=============================================="
 					echo -e " "
 					echo -e "            Invalid Kernel device!"
@@ -57,7 +56,6 @@ while [[ $# -ge 1 ]]; do
 						kernel_name=CAF;;
 					*)
 						echo -e "${BRed} "
-						echo -e " "
 						echo -e "=============================================="
 						echo -e " "
 						echo -e "            Invalid Kernel name!"
@@ -74,7 +72,6 @@ while [[ $# -ge 1 ]]; do
 
 			*)
 					echo -e "${BRed} "
-					echo -e " "
 					echo -e "=============================================="
 					echo -e " "
 					echo -e "             Invalid command!"
@@ -104,7 +101,6 @@ case "$compiler" in
 
 	*)
 		echo -e "${BRed} "
-		echo -e " "
 		echo -e "=============================================="
 		echo -e " "
 		echo -e "             Invalid Toolchain!"
@@ -115,10 +111,10 @@ case "$compiler" in
 esac
 
 # Start building
-echo -e " "
-echo -e "${BGre}              Starting building"
-echo -e " "
-echo -e "${BRed}=============================================="
+echo -e "${BGre}"
+echo -e "              Starting building"
+echo -e "${BRed} "
+echo -e "=============================================="
 echo -e "=============================================="
 echo -e "${RCol} "
 
@@ -126,10 +122,10 @@ echo -e "${RCol} "
 rm -rf $objdir/arch/$ARCH/boot/Image.gz-dtb
 
 # Start the real building
-echo -e " "
-echo -e "${BGre}            Building the Kernel..."
-echo -e " "
-echo -e "${BRed}=============================================="
+echo -e "${BGre}"
+echo -e "            Building the Kernel..."
+echo -e "${BRed}"
+echo -e "=============================================="
 echo -e " "
 echo -e "${RCol} "
 make -s O=$objdir $CONFIG_FILE $THREADS
@@ -137,9 +133,8 @@ make -s O=$objdir $THREADS $CLANG_CC
 
 # Check compilation status
 if [ ! -f $objdir/arch/$ARCH/boot/Image.gz-dtb ]; then
-echo -e " "
-echo -e " "
-echo -e "${BRed}            Compilation Failed!"
+echo -e "${BRed}"
+echo -e "            Compilation Failed!"
 echo -e " "
 echo -e "=============================================="
 echo -e "=============================================="
@@ -150,15 +145,15 @@ fi;
 date="$(date +'%Y-%m-%d-%H:%M')"
 
 # Copy Kernel image
-echo -e " "
-echo -e "${BGre}             Copying Kernel Image..."
+echo -e "${BGre}"
+echo -e "             Copying Kernel Image..."
 echo -e "${BRed}=============================================="
-echo -e "${RCol} "
+echo -e "${RCol}"
 cp -rf $objdir/arch/$ARCH/boot/Image.gz-dtb $anykernel/zImage
 
 # Make the package
-echo -e " "
-echo -e "${BGre}                Packaging..."
+echo -e "${BGre}"
+echo -e "                Packaging..."
 echo -e "${BRed}=============================================="
 echo -e "${RCol} "
 cd $anykernel
@@ -174,8 +169,8 @@ zip -r9 -q $zip_name * -x README.md
 cd $kernel_dir
 
 # Output building state
-echo -e " "
-echo -e "${BGre}           Build finished succesfully!"
+echo -e "${BGre}"
+echo -e "           Build finished succesfully!"
 echo -e "${BRed}=============================================="
 echo -e "=============================================="
 echo -e " "
