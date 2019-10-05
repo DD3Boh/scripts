@@ -15,76 +15,61 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 
 # Kernel info
 kernel_dir=$PWD
-export ARCH="arm64"
 THREADS=-j$( nproc --all )
+image_name=Image.gz-dtb
+export ARCH=arm64
 
 while [[ $# -ge 1 ]]; do
 	case "${1}" in
 
-			# Check the device name
-			"-d" | "--device")
-				shift
+		# Check the arch
+		"-a" | "--arch")
+			shift
 
-				defconfig=${1}_defconfig
-				if [[ -f arch/$ARCH/configs/$defconfig ]]; then
-					device_name=${1}
-					objdir=$kernel_dir/../out/$device_name
-				else
-					echo -e "${BRed} "
-					echo -e "=============================================="
-					echo -e " "
-					echo -e "            Invalid Kernel device!"
-					echo -e " "
-					echo -e "=============================================="
-					echo -e "${RCol}"
-					exit 1
-				fi;;
+			export ARCH=${1};;
 
-			# Check the Kernel name
-			"-n" | "--name")
-				shift
+		# Check the device name
+		"-d" | "--device")
+			shift
 
-				case ${1} in
+			defconfig=${1}_defconfig
+			device_name=${1};;
 
-					"oreo" | "octopus" | "Octopus")
-						kernel_name=Octopus;;
+		# Check the Kernel name
+		"-n" | "--name")
+			shift
 
-					"pie" | "pepper" | "Pepper")
-						kernel_name=Pepper;;
+			kernel_name=${1};;
 
-					"caf" | "rebase")
-						kernel_name=CAF;;
-					*)
-						echo -e "${BRed} "
-						echo -e "=============================================="
-						echo -e " "
-						echo -e "            Invalid Kernel name!"
-						echo -e " "
-						echo -e "=============================================="
-						echo -e "${RCol}"
-						exit 1;;
-				esac;;
+		# Check the GCC version
+		"-c" | "--compiler")
+			shift
+			compiler=${1};;
 
-			# Check the GCC version
-			"-c" | "--compiler")
-				shift
-				compiler=${1};;
+		# Check the kernel image name
+		"-i" | "--image")
+			shift
+			image_name=${1};;
 
-			*)
-					echo -e "${BRed} "
-					echo -e "=============================================="
-					echo -e " "
-					echo -e "             Invalid command!"
-					echo -e " "
-					echo -e "=============================================="
-					echo -e "${RCol}"
-					exit 1;;
+		"--do-modules")
+			shift
+			modules=true;;
+
+		*)
+			echo -e "${BRed} "
+			echo -e "=============================================="
+			echo -e " "
+			echo -e "             Invalid command!"
+			echo -e " "
+			echo -e "=============================================="
+			echo -e "${RCol}"
+			exit 1;;
 	esac
 
 	shift
 done
 
-export anykernel=$kernel_dir/../anykernel
+anykernel=$kernel_dir/../anykernel
 CONFIG_FILE=$defconfig
 
 case "$compiler" in
@@ -110,6 +95,25 @@ case "$compiler" in
 		exit 1;;
 esac
 
+if [[ -f arch/$ARCH/configs/$defconfig ]]; then
+	objdir=$kernel_dir/../out/$device_name
+	image_path=$objdir/arch/$ARCH/boot/$image_name
+else
+	echo -e "${BRed} "
+	echo -e "=============================================="
+	echo -e " "
+	echo -e "            Invalid Kernel device!"
+	echo -e " "
+	echo -e "=============================================="
+	echo -e "${RCol}"
+	exit 1
+fi
+
+# Create the out folder
+if [[ ! -d $objdir ]]; then
+	mkdir -p $objdir
+fi
+
 # Start building
 echo -e "${BGre}"
 echo -e "              Starting building"
@@ -119,7 +123,7 @@ echo -e "=============================================="
 echo -e "${RCol} "
 
 # Cleanup from the old image
-rm -rf $objdir/arch/$ARCH/boot/Image.gz-dtb
+rm -rf $image_path
 
 # Start the real building
 echo -e "${BGre}"
@@ -132,14 +136,14 @@ make -s O=$objdir $CONFIG_FILE $THREADS
 make -s O=$objdir $THREADS $CLANG_CC
 
 # Check compilation status
-if [ ! -f $objdir/arch/$ARCH/boot/Image.gz-dtb ]; then
-echo -e "${BRed}"
-echo -e "            Compilation Failed!"
-echo -e " "
-echo -e "=============================================="
-echo -e "=============================================="
-echo -e "${RCol} "
-exit 1
+if [ ! -f $image_path ]; then
+	echo -e "${BRed}"
+	echo -e "            Compilation Failed!"
+	echo -e " "
+	echo -e "=============================================="
+	echo -e "=============================================="
+	echo -e "${RCol} "
+	exit 1
 fi;
 # Get date and time first
 date="$(date +'%Y-%m-%d-%H:%M')"
@@ -149,7 +153,11 @@ echo -e "${BGre}"
 echo -e "             Copying Kernel Image..."
 echo -e "${BRed}=============================================="
 echo -e "${RCol}"
-cp -rf $objdir/arch/$ARCH/boot/Image.gz-dtb $anykernel/zImage
+cp -rf $image_path $anykernel/
+if [[ $modules == "true" ]]; then
+	rm -rf $anykernel/modules/system/lib/modules/*
+	find $objdir/. -name "*\.ko" -exec cp  {} $anykernel/modules/system/lib/modules/ \;
+fi;
 
 # Make the package
 echo -e "${BGre}"
@@ -175,6 +183,6 @@ echo -e "${BRed}=============================================="
 echo -e "=============================================="
 echo -e " "
 echo -e " "
-echo -e "${BGre}    $zip_name"
+echo -e "${BGre}       $zip_name"
 echo -e "-----------------------------------------------"
 echo -e "${RCol} "
