@@ -1,12 +1,12 @@
 #!/bin/bash
 
 adb_push_help() {
-	echo "usage: adb_push -f <filename>"
 	echo "commands:"
 	echo "    -h | --help			show this help";
-	echo "    -f | --file			choose the file to push with the exact path";
-	echo "    -s | --search		search for the filename to push";
+	echo "    -f | --file			choose the file to push with the exact local path";
 	echo "    -d | --directory		push the chosen file to a different directory than the path it's in locally";
+	echo "    -s | --search		search for the filename to push";
+	echo "    -p | --complete-path	push the chosen file to the same path as it is locally";
 };
 
 adb_push_filechoosing() {
@@ -25,6 +25,7 @@ adb_push_filechoosing() {
 		echo "Which file do you want to push?"
 		echo "Write the full directory"
 		read file_local_path;
+		file_final_path=$file_local_path;
 	fi;
 };
 
@@ -48,7 +49,6 @@ while [[ $# -ge 1 ]]; do
 
 		file=${1};
 		file_local_path=$(find . -name $file | sed 's|./||');
-		file_final_path=$file_local_path;
 		adb_push_filechoosing;;
 
 	"-f" | "--file")
@@ -66,6 +66,13 @@ while [[ $# -ge 1 ]]; do
 
 		adb_push_help;
 		exit 1;;
+
+	"-p" | "--complete-path")
+		shift
+
+		file_local_path=${1};
+		file_final_path=${1};
+		echo $file_final_path;;
 
 	esac
 	shift
