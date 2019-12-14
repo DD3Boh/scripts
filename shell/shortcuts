@@ -73,3 +73,11 @@ fast_gerrit() {
 push_gerrit() {
 	git push gerrit HEAD:refs/for/${1}
 };
+
+dec_dtb() {
+	if [ ${1} == '--help' ]; then
+		echo "Usage: dec_dtb <output>.dts <input>.dtb"
+		return 0
+	fi;
+	dtc -I dtb -O dts -o ${1} ${2}
+};
