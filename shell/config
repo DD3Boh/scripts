@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Include bin folder
+export PATH="$PATH:$HOME/scripts/bin"
+
+# Include git_shortcuts
+source $HOME/scripts/shell/fgit
+
+# Include bash_shortcuts
+source $HOME/scripts/shell/shortcuts
+
+# Set micro as default editor
+export VISUAL=micro
+export EDITOR=micro
