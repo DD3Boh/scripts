@@ -81,3 +81,17 @@ dec_dtb() {
 	fi;
 	dtc -I dtb -O dts -o ${1} ${2}
 };
+
+backup_branch() {
+	if [[ ${1} == "" ]]; then
+		return 0;
+	fi;
+	remote=${1}
+	current_branch=$(git branch --show-current)
+	current_date=$(date +%G%m%d)
+	backup_branch=backup/$current_branch-$current_date
+	git checkout -b $backup_branch
+	git fetch $remote $current_branch
+	git reset --hard FETCH_HEAD
+	git checkout $current_branch
+};
