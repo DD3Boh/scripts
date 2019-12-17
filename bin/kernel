@@ -73,16 +73,14 @@ anykernel=$kernel_dir/../anykernel
 CONFIG_FILE=$defconfig
 
 case "$compiler" in
-	"gcc7.x" | "gcc7")
-		export CROSS_COMPILE=$GCC_7_PATH;;
 
-	"gcc4.9")
-		export CROSS_COMPILE=$GCC_49_PATH;;
+	"gcc")
+		export CROSS_COMPILE=$gccpath;;
 
 	"clang")
-		export CROSS_COMPILE=$GCC_49_PATH
+		export CROSS_COMPILE=$gccpath
 		export CLANG_TRIPLE=aarch64-linux-gnu-
-		CLANG_CC="CC=$CLANG_PATH/bin/clang";;
+		CLANG_CC="CC=$clangpath/bin/clang";;
 
 	*)
 		echo -e "${BRed} "
