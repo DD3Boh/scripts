@@ -17,7 +17,6 @@ Whi='\e[0;37m';     BWhi='\e[1;37m';    UWhi='\e[4;37m';    IWhi='\e[0;97m';    
 kernel_dir=$PWD
 THREADS=-j$( nproc --all )
 image_name=Image.gz-dtb
-export ARCH=arm64
 
 while [[ $# -ge 1 ]]; do
 	case "${1}" in
@@ -26,14 +25,18 @@ while [[ $# -ge 1 ]]; do
 		"-a" | "--arch")
 			shift
 
-			export ARCH=${1};;
+			arch=${1};;
 
 		# Check the device name
 		"-d" | "--device")
 			shift
 
-			defconfig=${1}_defconfig
-			device_name=${1};;
+			if [[ ${1} == "desktop" ]]; then
+				desktop_build=true;
+			else
+				defconfig=${1}_defconfig
+				device_name=${1};
+			fi;;
 
 		# Check the Kernel name
 		"-n" | "--name")
@@ -72,6 +75,10 @@ done
 anykernel=$kernel_dir/../anykernel
 CONFIG_FILE=$defconfig
 
+if [[ -z $arch ]]; then
+	arch=arm64
+fi;
+
 case "$compiler" in
 
 	"gcc")
@@ -79,8 +86,10 @@ case "$compiler" in
 
 	"clang")
 		export CROSS_COMPILE=$gccpath
+		export CROSS_COMPILE_ARM32=$gcc32path
 		export CLANG_TRIPLE=aarch64-linux-gnu-
-		CLANG_CC="CC=$clangpath/bin/clang";;
+		CLANG_CC="CC=clang"
+		export PATH="$clangpath/bin:${PATH}";;
 
 	*)
 		echo -e "${BRed} "
@@ -93,9 +102,9 @@ case "$compiler" in
 		exit 1;;
 esac
 
-if [[ -f arch/$ARCH/configs/$defconfig ]]; then
+if [[ -f arch/$arch/configs/$defconfig ]]; then
 	objdir=$kernel_dir/../out/$device_name
-	image_path=$objdir/arch/$ARCH/boot/$image_name
+	image_path=$objdir/arch/$arch/boot/$image_name
 else
 	echo -e "${BRed} "
 	echo -e "=============================================="
@@ -130,8 +139,8 @@ echo -e "${BRed}"
 echo -e "=============================================="
 echo -e " "
 echo -e "${RCol} "
-make -s O=$objdir $CONFIG_FILE $THREADS
-make -s O=$objdir $THREADS $CLANG_CC
+make -s O=$objdir $CONFIG_FILE ARCH=$arch
+make O=$objdir $THREADS $CLANG_CC ARCH=$arch
 
 # Check compilation status
 if [ ! -f $image_path ]; then
