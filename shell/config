@@ -12,3 +12,8 @@ source $HOME/scripts/shell/shortcuts
 # Set micro as default editor
 export VISUAL=micro
 export EDITOR=micro
+
+# ccache
+export CCACHE_EXEC=$(which ccache)
+export USE_CCACHE=1
+export CCACHE_DIR=$HOME/ROMs/ccache
