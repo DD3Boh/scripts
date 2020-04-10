@@ -1,7 +1,7 @@
 if [[ ${1} == "z2" ]]; then
-	path="/home/dd3boh/ROMs/lineage-16.0/out/target/product/z2_plus"
+	path="/home/dd3boh/ROMs/lineage-17.1/out/target/product/z2_plus"
 else
-	path="/home/dd3boh/ROMs/lineage-16.0/out/target/product/griffin"
+	path="/home/dd3boh/ROMs/lineage-17.1/out/target/product/griffin"
 fi;
 
 echo "lib32";
