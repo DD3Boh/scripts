@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Author: Davide Garberi <dade.garberi@gmail.com>
+
+# log the current and konsole windows
+currentwindow="$(wmctrl -lp | grep "$(xdotool getwindowfocus getwindowname)" | tail -1 | awk '{ print $1 }')"
+konsolewindow="$(wmctrl -lp | grep "$(pgrep konsole)" | tail -1 | awk '{ print $1 }')"
+
+# Prevent sh from not finding the file on first run
+if [[ ! -f /tmp/previuswindow ]]; then
+	echo "$konsolewindow" > /tmp/previuswindow
+fi;
+
+if [[ -z $(pidof konsole) ]]; then
+	konsole
+elif [[ $currentwindow == $konsolewindow ]]; then
+	wmctrl -ia "$(cat /tmp/previuswindow)"
+else
+	echo "$currentwindow" > /tmp/previuswindow
+	wmctrl -iR "$(wmctrl -lp | grep "$konsolewindow")"
+fi;
