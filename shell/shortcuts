@@ -95,3 +95,12 @@ backup_branch() {
 	git reset --hard FETCH_HEAD
 	git checkout $current_branch
 };
+
+savedefconfig() {
+	make O=../out/${1} ${1}_defconfig ARCH=arm64
+	make savedefconfig ARCH=arm64 O=../out/${1}
+	cp ../out/${1}/defconfig arch/arm64/configs/${1}_defconfig
+};
+
+# Aliases
+alias sideload='adb shell twrp sideload; adb wait-for-sideload; adb sideload'
