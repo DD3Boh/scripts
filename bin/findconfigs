@@ -1,0 +1,13 @@
+#!/bin/sh
+
+module=$(echo ${1} | sed 's|_|-|g')
+config=$(grep -r "$module\.o" | grep Makefile | sed 's|.*(||;s|).*||;s|CONFIG_||')
+deps=$(grep -r -A5 "config $config$" | grep depends | sed 's|.*depends on ||')
+
+echo "CONFIG_$config is needed to build $module.ko"
+
+if [[ -z $deps ]]; then
+    echo "No direct dependencies for this config"
+else
+    echo "It directly depends on $deps"
+fi
