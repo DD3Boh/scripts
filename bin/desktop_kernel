@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cores=$(nproc --all)
+
+make O=../out -j$cores
+
+sudo make headers_install -j$cores O=../out
+sudo make modules_install -j$cores O=../out
+
+sudo mv /boot/vmlinuz-linux-custom /boot/vmlinuz-linux-custom-old
+sudo cp -v ../out/arch/x86_64/boot/bzImage /boot/vmlinuz-linux-custom
+
+sudo mv /boot/initramfs-linux-custom.img /boot/iniramfs-linux-custom-old.img
+
+if [[ ${1} != "" ]]; then
+    sudo mkinitcpio -k ${1} -g /boot/initramfs-linux-custom.img
+fi
+
+echo "Done."
