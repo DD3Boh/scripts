@@ -59,7 +59,7 @@ fast_gerrit() {
 		"lineage" | "Lineage" | "LineageOS" | "lineageos")
 			shift
 
-			scp -p -P 29418 DD3Boh@review.lineageos.org:hooks/commit-msg .git/hooks;
+			scp -p -O -P 29418 DD3Boh@review.lineageos.org:hooks/commit-msg .git/hooks;
 			amend --no-edit;;
 
 		"twrp" | "TWRP")
@@ -75,7 +75,7 @@ push_gerrit() {
 };
 
 dec_dtb() {
-	if [ ${1} == '--help' ]; then
+	if [[ ${1} == '--help' ]]; then
 		echo "Usage: dec_dtb <output>.dts <input>.dtb"
 		return 0
 	fi;
@@ -101,6 +101,11 @@ savedefconfig() {
 	make savedefconfig ARCH=arm64 O=../out/${1}
 	cp ../out/${1}/defconfig arch/arm64/configs/${1}_defconfig
 };
+
+bootwindows() {
+	sudo bootctl set-oneshot auto-windows
+	reboot
+}
 
 # Aliases
 alias sideload='adb shell twrp sideload; adb wait-for-sideload; adb sideload'
