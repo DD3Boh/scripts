@@ -97,9 +97,14 @@ backup_branch() {
 };
 
 savedefconfig() {
-	make O=../out/${1} ${1}_defconfig ARCH=arm64
+	if [[ -z $(ls arch/*/configs/${1}_defconfig) ]]; then
+		defconfig="vendor/${1}_defconfig"
+	else
+		defconfig="${1}_defconfig"
+	fi;
+	make O=../out/${1} $defconfig ARCH=arm64
 	make savedefconfig ARCH=arm64 O=../out/${1}
-	cp ../out/${1}/defconfig arch/arm64/configs/${1}_defconfig
+	cp ../out/${1}/defconfig arch/arm64/configs/$defconfig
 };
 
 bootwindows() {
