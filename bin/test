@@ -1,0 +1,5 @@
+mkbootimg2 --kernel boot.img-zImage --ramdisk boot.img-ramdisk.gz --base $(cat boot.img-base) --board $(cat boot.img-board) --os_version $(cat boot.img-osversion) --os_patch_level $(cat boot.img-oslevel) --kernel_offset $(cat boot.img-kerneloff) --ramdisk_offset $(cat boot.img-ramdiskoff) --second_offset $(cat boot.img-secondoff) --tags_offset $(cat boot.img-tagsoff) --cmdline $(cat boot.img-cmdline) --header_version $(cat boot.img-headerversion) --pagesize $(cat boot.img-pagesize) --output boot-new.img 
+
+
+# test2
+mkbootimg2 --kernel boot.img-zImage --ramdisk boot.img-ramdisk.gz --base $(cat boot.img-base) --kernel_offset $(cat boot.img-kerneloff) --ramdisk_offset $(cat boot.img-ramdiskoff) --second_offset $(cat boot.img-secondoff) --tags_offset $(cat boot.img-tagsoff) --cmdline "$(cat boot.img-cmdline)" --pagesize $(cat boot.img-pagesize) --os_version $(cat boot.img-osversion) --os_patch_level $(cat boot.img-oslevel) --output boot-new.img

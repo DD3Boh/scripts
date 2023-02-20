@@ -1,8 +1,5 @@
-if [[ ${1} == "z2" ]]; then
-	path="/home/dd3boh/ROMs/lineage-17.1/out/target/product/z2_plus"
-else
-	path="/home/dd3boh/ROMs/lineage-17.1/out/target/product/griffin"
-fi;
+
+path="/home/dd3boh/ROMs/lineage-18.1/out/target/product/${1}"
 
 echo "lib32";
 java -jar ~/Programs/MissingBlobs/MissingBlobs.jar $path/system/lib $path/vendor/lib

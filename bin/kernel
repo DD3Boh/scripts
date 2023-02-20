@@ -34,8 +34,8 @@ while [[ $# -ge 1 ]]; do
 			if [[ ${1} == "desktop" ]]; then
 				desktop_build=true;
 			else
-				defconfig=${1}_defconfig
-				device_name=${1};
+				device_name="${1}"
+				defconfig="${device_name}_defconfig";
 			fi;;
 
 		# Check the Kernel name
@@ -53,6 +53,10 @@ while [[ $# -ge 1 ]]; do
 		"-i" | "--image")
 			shift
 			image_name=${1};;
+
+		"--dtb")
+			shift
+			separated_dtb=true;;
 
 		"--do-modules")
 			shift
@@ -82,7 +86,8 @@ fi;
 case "$compiler" in
 
 	"gcc")
-		export CROSS_COMPILE=$gccpath;;
+		export CROSS_COMPILE=$gccpath
+		export CROSS_COMPILE_ARM32=$gcc32path;;
 
 	"clang")
 		export CROSS_COMPILE=$gccpath
@@ -103,6 +108,10 @@ case "$compiler" in
 esac
 
 if [[ -f arch/$arch/configs/$defconfig ]]; then
+	objdir=$kernel_dir/../out/$device_name
+	image_path=$objdir/arch/$arch/boot/$image_name
+elif [[ -f arch/$arch/configs/vendor/$defconfig ]]; then
+	CONFIG_FILE=vendor/$defconfig
 	objdir=$kernel_dir/../out/$device_name
 	image_path=$objdir/arch/$arch/boot/$image_name
 else
@@ -140,7 +149,7 @@ echo -e "=============================================="
 echo -e " "
 echo -e "${RCol} "
 make -s O=$objdir $CONFIG_FILE ARCH=$arch
-make O=$objdir $THREADS $CLANG_CC ARCH=$arch
+make -s O=$objdir $THREADS $CLANG_CC ARCH=$arch
 
 # Check compilation status
 if [ ! -f $image_path ]; then
@@ -163,7 +172,13 @@ echo -e "${RCol}"
 cp -rf $image_path $anykernel/
 if [[ $modules == "true" ]]; then
 	rm -rf $anykernel/modules/system/lib/modules/*
-	find $objdir/. -name "*\.ko" -exec cp  {} $anykernel/modules/system/lib/modules/ \;
+	find $objdir/. -name "*\.ko" -exec cp {} $anykernel/modules/system/lib/modules/ \;
+fi;
+
+if [[ $separated_dtb == "true" ]]; then
+	rm -rf $anykernel/dtb*
+	find $objdir/arch/$arch/boot/dts/. -name "*\.dtb" -exec cat {} + > $anykernel/dtb
+	find $objdir/arch/$arch/boot/dts/. -name "*\.dtbo" -exec cat {} + > $anykernel/dtbo
 fi;
 
 # Make the package
