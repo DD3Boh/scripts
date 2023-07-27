@@ -24,6 +24,7 @@ BRIGHTNESS_PATH = PANEL0_BACKLIGHT_PATH + 'brightness'
 DISPLAY_PATH = '/sys/devices/platform/soc/soc:qcom,dsi-display-primary/'
 DIM_ALPHA_PATH = DISPLAY_PATH + 'fod_dim_alpha'
 FORCE_FOD_UI_PATH = DISPLAY_PATH + 'force_fod_ui'
+BL_LVL_PATH = DISPLAY_PATH + 'backlight_lvl'
 
 def get_max_brightness():
 	return get_shell_cmd_int('cat', MAX_BRIGHTNESS_PATH)
@@ -33,6 +34,9 @@ def get_min_brightness():
 
 def set_brightness(brightness):
 	set_shell_cmd_int(brightness, BRIGHTNESS_PATH)
+
+def get_backlight_lvl():
+	return get_shell_cmd_int('cat', BL_LVL_PATH)
 
 def set_dim_alpha(alpha):
 	set_shell_cmd_int(alpha, DIM_ALPHA_PATH)
@@ -82,12 +86,15 @@ def print_help():
 	)
 
 def print_pair(pair):
-	print('{}: {}'.format(pair[0], pair[1]))
+	print('{} ({}): {}'.format(pair[0], pair[1], pair[2]))
+
+def print_summary_pair(pair):
+	print('{}\t{}'.format(pair[1], pair[2]))
 
 def print_pairs():
 	print('{} pairs'.format(len(brightness_alpha_pairs)))
 	for pair in brightness_alpha_pairs:
-		print_pair(pair)
+		print_summary_pair(pair)
 
 def add_pair(pair):
 	bisect.bisect(brightness_alpha_pairs, pair, key=lambda p: p[0])
@@ -109,7 +116,8 @@ def fill_pairs(length):
 		brightness = i * (max_brightness - min_brightness) // (length - 1) + min_brightness
 		set_brightness(brightness)
 		alpha = get_dim_alpha()
-		pair = [brightness, alpha]
+		bl_level = get_backlight_lvl()
+		pair = [brightness, bl_level, alpha]
 		brightness_alpha_pairs.append(pair)
 		print_pair(pair)
 
@@ -136,7 +144,7 @@ def calibrate_one(pair):
 	while True:
 		print_pair(pair)
 
-		dim_alpha = pair[1]
+		dim_alpha = pair[2]
 		mod = input('Modifier: ')
 		new_dim_alpha = dim_alpha
 		mod_int = 0
@@ -175,7 +183,7 @@ def calibrate_one(pair):
 		if new_dim_alpha < 0:
 			new_dim_alpha = 0
 
-		pair[1] = dim_alpha = new_dim_alpha
+		pair[2] = dim_alpha = new_dim_alpha
 
 	switch_fod_ui = False
 
