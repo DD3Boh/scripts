@@ -1,5 +1,5 @@
 
-path="/home/dd3boh/ROMs/lineage-18.1/out/target/product/${1}"
+path=$(pwd)
 
 echo "lib32";
 java -jar ~/Programs/MissingBlobs/MissingBlobs.jar $path/system/lib $path/vendor/lib
