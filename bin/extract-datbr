@@ -1,0 +1,21 @@
+#!/bin/sh
+
+partition_list="${1}"
+
+if [[ ! -d mount/ ]]; then
+	mkdir mount
+fi
+
+for partition in $partition_list; do
+	if [[ ! -d $partition/ ]]; then
+		mkdir $partition
+	fi
+	if [[ -f $partition.new.dat ]]; then
+		rm $partition.new.dat
+	fi
+	brotli --decompress $partition.new.dat.br -o $partition.new.dat
+	sdat2img $partition.transfer.list $partition.new.dat $partition.img
+	sudo mount -o ro $partition.img mount
+	sudo cp -r mount/. $partition
+	sudo chown -R dd3boh: $partition
+done
