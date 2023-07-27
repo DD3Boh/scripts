@@ -2,7 +2,7 @@
 # This script checks if a list of programs are running and kills them if they are
 
 # Declare an array of programs to kill
-programs=("telegram-desktop" "chrome" "discord")
+programs=("telegram-desktop" "discord")
 
 # Run the script indefinitely
 while true; do
@@ -13,10 +13,10 @@ while true; do
 
     # If the PID is not empty, kill the process
     if [ -n "$pid" ]; then
-      kill $pid
+      kill -15 $pid
       echo "$program has been killed."
-    else
-      echo "$program is not running."
+    #else
+      #echo "$program is not running."
     fi
   done
 
