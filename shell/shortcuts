@@ -10,30 +10,8 @@ add_gerrit() {
 
 		"-r" | "--repo")
 			shift
-
-			repo="${1}";;
-
-		"-R" | "--rom")
-			shift
-
-			case "${1}" in
-
-			"lineage" | "Lineage" | "LineageOS" | "lineageos")
-				shift
-
-				git remote add gerrit ssh://DD3Boh@review.lineageos.org:29418/LineageOS/$repo;;
-
-			"twrp" | "TWRP")
-				shift
-
-				git remote add gerrit ssh://DD3Boh@gerrit.twrp.me:29418/$repo;;
-
-			*)
-				shift
-
-				echo "Invalid ROM";;
-
-			esac;;
+			git remote add gerrit ssh://DD3Boh@review.lineageos.org:29418/LineageOS/${1}
+			;;
 
 		"-h" | "--help")
 			shift
@@ -60,12 +38,6 @@ fast_gerrit() {
 			shift
 
 			scp -p -O -P 29418 DD3Boh@review.lineageos.org:hooks/commit-msg .git/hooks;
-			amend --no-edit;;
-
-		"twrp" | "TWRP")
-			shift
-
-			scp -p -P 29418 DD3Boh@gerrit.twrp.me:hooks/commit-msg .git/hooks;
 			amend --no-edit;;
 	esac;
 };
