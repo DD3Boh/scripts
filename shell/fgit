@@ -9,8 +9,16 @@ function merge_log() {
 $(git log --oneline $(git rev-parse HEAD)..FETCH_HEAD)" --signoff
 };
 
+# Aliases
 alias commit='git commit'
 alias amend='git commit --amend'
 alias pick='git cherry-pick'
 alias add='git add -A'
 alias rebase='git rebase'
+
+# Avoid polluting the shell with long outputs for git, man and others
+export PAGER=less
+export LESS="${LESS//--no-init/}"
+
+# Remove short outputs from the shell too - disabled for now
+# export LESS="${LESS//--quit-if-one-screen/}"
