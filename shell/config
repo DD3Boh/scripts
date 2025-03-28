@@ -3,8 +3,8 @@
 # Include bin folder
 export PATH="$PATH:$HOME/scripts/bin"
 
-# Include git_shortcuts
-source $HOME/scripts/shell/fgit
+# Include git shortcuts
+source $HOME/scripts/shell/git
 
 # Include bash_shortcuts
 source $HOME/scripts/shell/shortcuts
