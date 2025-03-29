@@ -1,13 +1,14 @@
 #!/bin/sh
+scripts=$(readlink -f "`dirname $0`/..")
 
 # Include bin folder
-export PATH="$PATH:$HOME/scripts/bin"
+export PATH="$PATH:$scripts/bin"
 
 # Include git shortcuts
-source $HOME/scripts/shell/git
+source "$scripts/shell/git"
 
 # Include bash_shortcuts
-source $HOME/scripts/shell/shortcuts
+source "$scripts/shell/shortcuts"
 
 # Set micro as default editor
 export VISUAL=micro
