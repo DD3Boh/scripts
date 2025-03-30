@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# Retrieve scripts directory
+if [ -n "${BASH_SOURCE}" ]; then
+  scripts=$(readlink -f "`dirname ${BASH_SOURCE[0]}`/../..")
+else
+  scripts=$(readlink -f "`dirname $0`/../..")
+fi
+
+# Replace the extended home path with `${HOME}`
+scripts_replaced="${scripts/#$HOME/\${HOME\}}"
+
+# Define the lines to add
+LINE1="source ${scripts_replaced}/shell/zsh/zimzshrc"
+LINE2="source ${scripts_replaced}/shell/config"
+
+# Path to .zshrc file
+zshrc="${HOME}/.zshrc"
+
+# Check if the file exists
+if [ -f "$zshrc" ]; then
+    echo "Backing up current zshrc file."
+    cp "$zshrc" "$zshrc.bak"
+fi
+
+# Updating zshrc
+echo "Updating zshrc file."
+
+# Re-create zshrc
+touch "$zshrc"
+
+# Write content in zshrc
+echo -e "$LINE1\n$LINE2\n" > "$zshrc"
+cat "$zshrc.bak" >> "$zshrc"
+
+# Create symlink for zimrc
+echo "Creating zimrc symlink"
+
+zimrc="${HOME}/.zimrc"
+if [ -e "$zimrc" ]; then
+	mv "$zimrc" "$zimrc.bak"
+	
+	# Also delete the file just to be sure
+	rm "$zimrc"
+fi
+
+ln -s "$scripts/shell/zsh/zimrc" "$zimrc"
+
+# Set zsh as default shell for the user
+zsh_path="$(which zsh)"
+if [ -z "$zsh_path" ]; then
+	echo "ZSH cannot be set as default shell since it's not installed."
+	echo "Install ZSH and then set it as default with the following command:"
+	echo "$ chsh $(whoami) $(which zsh)"
+	exit 1
+fi
+
+echo "Setting zsh as default shell)"
+chsh $(whoami) -s $(which zsh)
+
+echo "Done."
