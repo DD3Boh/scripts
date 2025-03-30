@@ -1,5 +1,11 @@
 #!/bin/sh
-scripts=$(readlink -f "`dirname $0`/..")
+
+# Retrieve scripts directory
+if [ -n "${BASH_SOURCE}" ]; then
+  scripts=$(readlink -f "`dirname ${BASH_SOURCE[0]}`/..")
+else
+  scripts=$(readlink -f "`dirname $0`/..")
+fi
 
 # Include bin folder
 export PATH="$PATH:$scripts/bin"
