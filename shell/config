@@ -16,6 +16,9 @@ source "$scripts/shell/git"
 # Include bash_shortcuts
 source "$scripts/shell/shortcuts"
 
+# Set additional bindkeys
+bindkey '^[[3;5~' kill-word # CTRL+DEL deletes the word after the cursor
+
 # Set micro as default editor
 export VISUAL=micro
 export EDITOR=micro
