@@ -19,6 +19,9 @@ source "$scripts/shell/shortcuts"
 # Set additional bindkeys
 bindkey '^[[3;5~' kill-word # CTRL+DEL deletes the word after the cursor
 
+# Allow unmatched glob patterns to be passed literally
+unsetopt nomatch
+
 # Set micro as default editor
 export VISUAL=micro
 export EDITOR=micro
