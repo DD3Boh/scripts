@@ -58,6 +58,10 @@ source ${ZIM_HOME}/init.zsh
 # Post-init module configuration
 # ------------------------------
 
+# Increase limits on history size
+HISTSIZE=2000000
+SAVEHIST=2000000
+
 #
 # zsh-history-substring-search
 #
