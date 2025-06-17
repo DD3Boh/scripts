@@ -84,5 +84,8 @@ bootwindows() {
 	reboot
 }
 
+# HIstory SEarch (hise)
+hise() { fc -lim "*$@*" 1 }
+
 # Aliases
 alias sideload='adb shell twrp sideload; adb wait-for-sideload; adb sideload'
