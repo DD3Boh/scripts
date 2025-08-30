@@ -1,25 +1,13 @@
 #!/bin/bash
-# This script checks if a list of programs are running and kills them if they are
 
-# Declare an array of programs to kill
-programs=("telegram-desktop" "discord")
+# This script periodically kills a list of chosen programs
+programs=("Telegram" "discord")
 
 # Run the script indefinitely
 while true; do
-  # Loop through each program in the array
-  for program in "${programs[@]}"; do
-    # Get the PID of the program
-    pid=$(pidof "$program")
-
-    # If the PID is not empty, kill the process
-    if [ -n "$pid" ]; then
-      kill -15 $pid
-      echo "$program has been killed."
-    #else
-      #echo "$program is not running."
-    fi
+  for app in "${programs[@]}"; do
+    pkill -f "$app"
   done
 
-  # Wait for 10 seconds before repeating the loop
-  sleep 10s
+  sleep 3
 done
