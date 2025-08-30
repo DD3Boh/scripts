@@ -89,3 +89,4 @@ hise() { fc -lim "*$@*" 1 }
 
 # Aliases
 alias sideload='adb shell twrp sideload; adb wait-for-sideload; adb sideload'
+alias blocker='nohup distraction-blocker > /dev/null 2>&1 &; disown'
