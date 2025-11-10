@@ -11,7 +11,7 @@ fi
 scripts_replaced="${scripts/#$HOME/\${HOME\}}"
 
 # Define the lines to add
-LINE1="source ${scripts_replaced}/shell/zsh/zimzshrc"
+LINE1="source ${scripts_replaced}/shell/zsh/zshrc"
 LINE2="source ${scripts_replaced}/shell/config"
 
 # Path to .zshrc file
@@ -39,7 +39,7 @@ echo "Creating zimrc symlink"
 zimrc="${HOME}/.zimrc"
 if [ -e "$zimrc" ]; then
 	mv "$zimrc" "$zimrc.bak"
-	
+
 	# Also delete the file just to be sure
 	rm "$zimrc"
 fi
